@@ -1,0 +1,9 @@
+{
+  "name": "Discover Your Impact",
+  "short_name": "Your Impact",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#00164E",
+  "theme_color": "#00164E",
+  "icons": [{ "src": "/brand/shield.png", "sizes": "400x480", "type": "image/png" }]
+}

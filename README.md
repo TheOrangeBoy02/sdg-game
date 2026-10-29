@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Discover Your Impact
 
-## Getting Started
+SDG mini-game for iPad kiosks (landscape). Welcome, optional first name, 5-question quiz, 30-second drawing challenge, reveal, and a 1080x1350 card that players save to their phone by scanning a QR code.
 
-First, run the development server:
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev -- -H 0.0.0.0   # open http://<your-mac-ip>:3000 on the iPad
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Without `BLOB_READ_WRITE_TOKEN`, cards are kept in memory (lost on restart), which is fine for testing. The QR uses the Mac's Wi-Fi address automatically when the kiosk runs at `localhost`, so a phone on the same Wi-Fi can scan it. Set `NEXT_PUBLIC_SITE_URL` to override.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy (Vercel)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Import the repo as a Vercel project.
+2. Storage, then Create Blob store, then connect it to the project. This adds `BLOB_READ_WRITE_TOKEN`.
+3. Deploy. Cards are stored at `cards/<id>.png`; the QR opens `/c/<id>`.
 
-## Learn More
+## Where to edit things
 
-To learn more about Next.js, take a look at the following resources:
+| What | File |
+| --- | --- |
+| Event name, hashtag, consent text, timer, idle reset | `src/lib/content.ts` (`EVENT`, `DRAW_SECONDS`, `IDLE_RESET_SECONDS`) |
+| Questions, answers and scoring weights | `src/lib/content.ts` (`QUESTIONS`) |
+| Identities, SDGs, messages, colours, drawing prompts | `src/lib/content.ts` (`THEMES`) |
+| Scoring and tie-break rules | `src/lib/scoring.ts` |
+| Card layout | `src/lib/card.ts` |
+| Reference sketches | `src/components/ReferenceSketch.tsx` |
+| SDG tile (placeholder for official icons) | `src/components/SdgTile.tsx` and the tile section of `card.ts` |
+| Logo / fonts | `public/brand/`, `public/fonts/` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Scoring: each answer gives +3 to its main theme and +1 to its secondary theme. If themes tie, the one picked most recently as a main answer wins, then the fixed `THEME_ORDER`. The same answers always produce the same identity.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Kiosk setup on iPad
 
-## Deploy on Vercel
+- Open the site in Safari, then Share and Add to Home Screen. It launches fullscreen.
+- Turn on Guided Access (Settings, Accessibility) to lock the iPad to the app.
+- Staff reset: press and hold the Standard Bank logo for 3 seconds.
+- The game resets after 90 seconds without a touch (not during drawing).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The 30-second timer runs on the wall clock. Tapping, backgrounding the app or slow frames cannot extend it, and the canvas ignores input after the deadline.
+- After an Apple Pencil is used, finger touches are ignored on the canvas (palm rejection).
+- Official SDG icons: if you swap them in, follow the UN SDG logo usage guidelines.

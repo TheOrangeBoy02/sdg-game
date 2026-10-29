@@ -1,26 +1,102 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: "BentonSans";
+  src: url("/fonts/BentonSans-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-display: block;
+}
+@font-face {
+  font-family: "BentonSans";
+  src: url("/fonts/BentonSans-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-display: block;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --font-sans: "BentonSans", system-ui, sans-serif;
+  --color-electric: #0051ff;
+  --color-sbblue: #0033a1;
+  --color-deep: #00008c;
+  --color-stature: #00164e;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
+  background: #00164e;
+  color: #fff;
+  overscroll-behavior: none;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* no double-tap zoom */
+}
+
+/* Kiosk: no text selection or iOS callouts inside the game */
+.kiosk {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  /* Downscaled from Sustain_wallpaper.png (6048px is too heavy for iPad memory) */
+  background: #005aaa url("/brand/wallpaper.png") center bottom / cover no-repeat;
+}
+
+.share-page {
+  background: #00164e;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-rise {
+  animation: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) rotate(-6deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06) rotate(1deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+.animate-pop {
+  animation: pop 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes pop-out {
+  to {
+    opacity: 0;
+    transform: scale(0.6) rotate(6deg);
+  }
+}
+.animate-pop-out {
+  animation: pop-out 0.35s ease-in both;
+}
+
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+.animate-pulse-soft {
+  animation: pulse-ring 1.6s ease-in-out infinite;
 }
