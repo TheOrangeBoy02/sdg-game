@@ -116,12 +116,12 @@ export const THEME_ORDER: ThemeId[] = [
 ];
 
 // Welcome screen: every official SDG icon, cycled 6 at a time.
-// SDG 5 (Gender Equality) is not in /public/brand/SDG yet: add the file, then its entry here.
 export const SDG_ICONS: { number: number; src: string }[] = [
   { number: 1, src: "/brand/SDG/SDG 1.png" },
   { number: 2, src: "/brand/SDG/SDG 2.png" },
   { number: 3, src: "/brand/SDG/SDG 3.png" },
   { number: 4, src: "/brand/SDG/SDG 4.png" },
+  { number: 5, src: "/brand/SDG/SDG 5.png" },
   ...[6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17].map((n) => ({
     number: n,
     src: `/brand/SDG/TGG_Icon_Color_${String(n).padStart(2, "0")}.png`,
