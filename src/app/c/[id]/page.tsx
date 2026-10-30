@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cardFileName, cardImageUrl, ID_RE } from "@/lib/cardStore";
+import { cardExists, cardFileName, ID_RE } from "@/lib/cardStore";
 import { ACADEMY_LOGO, EVENT } from "@/lib/content";
 import ShareActions from "./ShareActions";
 
@@ -9,8 +9,8 @@ type Params = { params: Promise<{ id: string }> };
 export const dynamic = "force-dynamic";
 
 async function getUrl(id: string) {
-  if (!ID_RE.test(id)) return null;
-  return cardImageUrl(id);
+  if (!ID_RE.test(id) || !(await cardExists(id))) return null;
+  return `/api/cards/${id}`;
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {

@@ -1,8 +1,9 @@
 import "server-only";
-import { head, put } from "@vercel/blob";
+import { get, head, put } from "@vercel/blob";
 
 // Cards go to Vercel Blob when BLOB_READ_WRITE_TOKEN is set.
 // Without it (local dev / testing on the iPad over LAN) they are kept in memory.
+// The store is private, so images are only ever served through /api/cards/<id>.
 
 const hasBlobToken = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 const pathFor = (id: string) => `cards/${id}.png`;
@@ -14,7 +15,7 @@ const mem: Mem = (g.__cards ??= new Map());
 export async function saveCard(id: string, data: ArrayBuffer) {
   if (hasBlobToken()) {
     await put(pathFor(id), data, {
-      access: "public",
+      access: "private",
       contentType: "image/png",
       addRandomSuffix: false,
       cacheControlMaxAge: 60 * 60 * 24 * 365,
@@ -24,26 +25,23 @@ export async function saveCard(id: string, data: ArrayBuffer) {
   mem.set(id, Buffer.from(data));
 }
 
-/** Public URL for the image, or null if not found */
-export async function cardImageUrl(id: string): Promise<string | null> {
+export async function cardExists(id: string): Promise<boolean> {
   if (hasBlobToken()) {
     try {
-      const meta = await head(pathFor(id));
-      return meta.url;
+      await head(pathFor(id));
+      return true;
     } catch {
-      return null;
+      return false;
     }
   }
-  return mem.has(id) ? `/api/cards/${id}` : null;
+  return mem.has(id);
 }
 
 /** PNG bytes of the card, or null if not found */
 export async function cardImage(id: string): Promise<BodyInit | null> {
   if (hasBlobToken()) {
-    const url = await cardImageUrl(id);
-    if (!url) return null;
-    const res = await fetch(url);
-    return res.ok ? res.body : null;
+    const res = await get(pathFor(id), { access: "private" });
+    return res?.statusCode === 200 ? res.stream : null;
   }
   const data = mem.get(id);
   return data ? new Uint8Array(data) : null;

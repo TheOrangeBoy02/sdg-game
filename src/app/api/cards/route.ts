@@ -42,7 +42,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const buf = await req.arrayBuffer();
-  if (buf.byteLength === 0 || buf.byteLength > MAX_BYTES) {
+  // Anything shorter than the PNG signature would also make the Uint8Array view below throw
+  if (buf.byteLength < PNG_SIG.length || buf.byteLength > MAX_BYTES) {
     return NextResponse.json({ error: "Invalid size" }, { status: 413 });
   }
   const head = new Uint8Array(buf, 0, 4);
