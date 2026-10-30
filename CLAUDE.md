@@ -71,7 +71,7 @@ Scoring (`src/lib/scoring.ts`): each answer gives +3 to its primary theme and +1
 | `src/lib/cardStore.ts` | Vercel Blob when token is set, in-memory Map otherwise (local dev). Path `cards/<nanoid16>.png` |
 | `src/app/api/cards/[id]/route.ts` | Same-origin copy of the card PNG (memory or proxied from Blob). `?download=1` adds `Content-Disposition: attachment` |
 | `src/app/c/[id]/page.tsx` + `ShareActions.tsx` | Phone landing page: card image (Blob URL), OG image meta. Share prefetches the PNG from `/api/cards/<id>` on load (iOS needs `navigator.share()` straight after the tap) and is hidden where file sharing is unsupported. Download is a plain link to `?download=1` |
-| `src/components/ReferenceSketch.tsx` | Inline SVG line-art references per theme |
+| `src/components/ReferenceSketch.tsx` | Reference photo per theme (`public/brand/sketchImage/`), `next/image` filling its tile |
 | `src/components/SdgTile.tsx` | Official UN SDG icon (files in `public/brand/SDG/`). Welcome screen cycles all of `SDG_ICONS` 6 at a time every `WELCOME_PAGE_SECONDS`; `card.ts` draws the theme icon (`theme.sdgIcon`) |
 
 Kiosk hardening already in place: `touch-action: none` on canvas, `manipulation` on body, no user scaling, `gesturestart`/`contextmenu` blocked, no text selection or callouts, `apple-mobile-web-app-capable`, fullscreen landscape manifest.
@@ -99,7 +99,7 @@ Not yet verified on real hardware. Next steps, in priority order:
 3. Done: `POST /api/cards` kiosk secret header and rate limit. Verify the iPad setup flow above on real hardware (Home Screen app keeps the key).
 4. Done: name blocklist. Owner to review the word lists in `nameFilter.ts` (add local-language terms as needed).
 5. Content review with the owner: questions, identities and messages in `content.ts`.
-6. Replace placeholders when assets arrive: `EVENT.eventName` and `EVENT.hashtag`, optionally nicer reference sketches. Done: official SDG icons (show them unaltered, per UN SDG logo guidelines).
+6. Replace placeholders when assets arrive: `EVENT.eventName` and `EVENT.hashtag`. Done: reference photos in `public/brand/sketchImage/`, official SDG icons (show them unaltered, per UN SDG logo guidelines).
 7. Polish only after the above: contrast of red/green identity titles on blue in `Reveal.tsx`, sound effects, transitions.
 
 Out of scope for v1: accounts, leaderboards, multiplayer, database, admin dashboard, offline mode.

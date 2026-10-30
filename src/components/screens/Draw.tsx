@@ -85,8 +85,8 @@ export default function Draw({
   if (phase === "intro") {
     return (
       <div className="flex flex-1 items-center gap-[5vw] px-[7vw] pb-[6vh]">
-        <div className="animate-pop flex h-[56vh] w-[56vh] shrink-0 items-center justify-center rounded-[4vh] bg-white text-stature shadow-2xl">
-          <ReferenceSketch theme={theme.id} className="h-[40vh] w-[40vh]" />
+        <div className="animate-pop relative h-[56vh] w-[56vh] shrink-0 overflow-hidden rounded-[4vh] bg-white shadow-2xl">
+          <ReferenceSketch theme={theme.id} sizes="56vh" />
         </div>
         <div className="animate-rise flex flex-col items-start">
           <p className="text-[2.2vh] font-bold uppercase tracking-[0.2em] text-white/60">Your drawing challenge</p>
@@ -144,8 +144,8 @@ export default function Draw({
           <p className="text-[4.4vh] font-bold leading-tight">{theme.sketchPrompt}</p>
         </div>
 
-        <div className="flex h-[22vh] w-[22vh] items-center justify-center rounded-[3vh] bg-white/10">
-          <ReferenceSketch theme={theme.id} className="h-[15vh] w-[15vh] text-white/90" />
+        <div className="relative h-[22vh] w-[22vh] overflow-hidden rounded-[3vh] bg-white/10">
+          <ReferenceSketch theme={theme.id} sizes="22vh" />
         </div>
 
         <button
