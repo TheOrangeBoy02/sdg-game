@@ -10,7 +10,7 @@ import type { Stroke } from "@/lib/strokes";
 type Upload =
   | { status: "working" }
   | { status: "ready"; url: string }
-  | { status: "error" };
+  | { status: "error"; noKey?: boolean };
 
 export default function Reveal({
   theme,
@@ -37,6 +37,10 @@ export default function Reveal({
         headers: { "Content-Type": "image/png", [KIOSK_HEADER]: kioskKey() ?? "" },
         body: blobRef.current,
       });
+      if (res.status === 401) {
+        setUpload({ status: "error", noKey: true });
+        return;
+      }
       if (!res.ok) throw new Error(String(res.status));
       const { shareUrl } = (await res.json()) as { shareUrl: string };
       setUpload({ status: "ready", url: shareUrl });
@@ -139,7 +143,9 @@ export default function Reveal({
             </p>
             <p className="mt-[1vh] text-[2vh] leading-snug text-stature/70">
               {upload.status === "error"
-                ? "Check the connection and tap Retry, or ask a crew member."
+                ? upload.noKey
+                  ? "This iPad isn't set up for uploads yet. Ask a crew member."
+                  : "Check the connection and tap Retry, or ask a crew member."
                 : "Open your phone camera and point it at the code."}
             </p>
           </div>

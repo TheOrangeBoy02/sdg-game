@@ -39,6 +39,7 @@ export async function POST(req: Request) {
     );
   }
   if (!kioskAllowed(req)) {
+    console.warn("card upload rejected: missing or wrong x-kiosk-key (open the kiosk once with ?kiosk=<KIOSK_SECRET>)");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const buf = await req.arrayBuffer();

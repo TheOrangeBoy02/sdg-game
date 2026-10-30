@@ -1,11 +1,13 @@
 import "server-only";
 import { get, head, put } from "@vercel/blob";
 
-// Cards go to Vercel Blob when BLOB_READ_WRITE_TOKEN is set.
-// Without it (local dev / testing on the iPad over LAN) they are kept in memory.
+// Cards go to Vercel Blob when it is configured (read-write token, or BLOB_STORE_ID with Vercel's
+// OIDC token), and always on Vercel, where memory is per instance and would lose cards.
+// Otherwise (local dev / testing on the iPad over LAN) they are kept in memory.
 // The store is private, so images are only ever served through /api/cards/<id>.
 
-const hasBlobToken = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+const hasBlobToken = () =>
+  Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID || process.env.VERCEL);
 const pathFor = (id: string) => `cards/${id}.png`;
 
 type Mem = Map<string, Buffer>;
