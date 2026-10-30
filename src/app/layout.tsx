@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   description: EVENT.subtitle,
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, title: EVENT.title, statusBarStyle: "black-translucent" },
+  icons: { apple: "/apple-touch-icon.png" },
+  // Next only emits the standard mobile-web-app-capable tag; older iPadOS needs the Apple one
+  // to open the Home Screen icon without Safari's URL bar.
+  other: { "apple-mobile-web-app-capable": "yes" },
 };
 
 export const viewport: Viewport = {

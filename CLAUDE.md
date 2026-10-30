@@ -74,7 +74,7 @@ Scoring (`src/lib/scoring.ts`): each answer gives +3 to its primary theme and +1
 | `src/components/ReferenceSketch.tsx` | Reference photo per theme (`public/brand/sketchImage/`), `next/image` filling its tile |
 | `src/components/SdgTile.tsx` | Official UN SDG icon (files in `public/brand/SDG/`). Welcome screen cycles all of `SDG_ICONS` 6 at a time every `WELCOME_PAGE_SECONDS`; `card.ts` draws the theme icon (`theme.sdgIcon`) |
 
-Kiosk hardening already in place: `touch-action: none` on canvas, `manipulation` on body, no user scaling, `gesturestart`/`contextmenu` blocked, no text selection or callouts, `apple-mobile-web-app-capable`, fullscreen landscape manifest.
+Kiosk hardening already in place: `touch-action: none` on canvas, `manipulation` on body, no user scaling, `gesturestart`/`contextmenu` blocked, no text selection or callouts, `apple-mobile-web-app-capable` (added by hand in `layout.tsx`, Next only emits the standard tag), standalone landscape manifest, square `apple-touch-icon.png`.
 
 Layout uses `vh`/`vw` units so it scales across iPad landscape sizes (1024x768 up to 1366x1024).
 
@@ -86,7 +86,7 @@ Layout uses `vh`/`vw` units so it scales across iPad landscape sizes (1024x768 u
 
 ### Kiosk iPad setup (once per iPad)
 
-Open `https://<site>/?kiosk=<KIOSK_SECRET>` in Safari, then Add to Home Screen from that page. The manifest deliberately has no `start_url`, so the Home Screen app launches at that URL with the key (iOS Home Screen apps do not share storage with Safari). The key is not stripped from the URL for the same reason; it is not visible in fullscreen mode. An iPad without the key gets the upload error/retry screen on reveal.
+Open `https://<site>/?kiosk=<KIOSK_SECRET>` in Safari, then Add to Home Screen from that page. To avoid typing the secret, run `npm run kiosk-qr` on the Mac (reads `.env`, opens a page with the setup link as a QR; optional site URL argument) and scan it with the iPad Camera. `Game.tsx` saves the key on load. The manifest deliberately has no `start_url`, so the Home Screen app launches at that URL with the key (iOS Home Screen apps do not share storage with Safari). The key is not stripped from the URL for the same reason; it is not visible in fullscreen mode. An iPad without the key gets the upload error/retry screen on reveal.
 
 ## Status
 

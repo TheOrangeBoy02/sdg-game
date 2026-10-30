@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { IDLE_RESET_SECONDS, THEMES, type ThemeId } from "@/lib/content";
+import { kioskKey } from "@/lib/kioskKey";
 import { resolveTheme } from "@/lib/scoring";
 import type { Stroke } from "@/lib/strokes";
 import { useIdle } from "@/lib/useIdle";
@@ -40,6 +41,11 @@ export default function Game() {
       document.removeEventListener("gesturestart", stop);
       document.removeEventListener("contextmenu", stop);
     };
+  }, []);
+
+  // Save the setup key from ?kiosk= right away, so a later reload without it still works
+  useEffect(() => {
+    kioskKey();
   }, []);
 
   // Auto-reset when a player walks away (not during the timed drawing)

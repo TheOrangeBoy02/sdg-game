@@ -1,9 +1,13 @@
 {
   "name": "Discover Your Impact",
   "short_name": "Your Impact",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "landscape",
+  "scope": "/",
   "background_color": "#00164E",
   "theme_color": "#00164E",
-  "icons": [{ "src": "/brand/shield.png", "sizes": "400x480", "type": "image/png" }]
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/brand/shield.png", "sizes": "400x480", "type": "image/png" }
+  ]
 }
