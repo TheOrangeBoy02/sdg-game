@@ -3,8 +3,19 @@
 import { useRef } from "react";
 import { EVENT } from "@/lib/content";
 
-/** Top bar. Staff can press and hold the logo for 3 seconds to reset the game. */
-export default function BrandBar({ onStaffReset, right }: { onStaffReset: () => void; right?: React.ReactNode }) {
+/**
+ * Top bar. Staff can press and hold the logo for 3 seconds to reset the game.
+ * `hideLogo` makes it transparent but keeps the hold-to-reset hotspot.
+ */
+export default function BrandBar({
+  onStaffReset,
+  right,
+  hideLogo,
+}: {
+  onStaffReset: () => void;
+  right?: React.ReactNode;
+  hideLogo?: boolean;
+}) {
   const timer = useRef<number | null>(null);
   const start = () => {
     timer.current = window.setTimeout(onStaffReset, 3000);
@@ -21,7 +32,7 @@ export default function BrandBar({ onStaffReset, right }: { onStaffReset: () => 
         src="/brand/logo-white.png"
         alt="Standard Bank"
         draggable={false}
-        className="h-[4.2vh] pl-15 pt-14 min-h-34 w-auto"
+        className={`h-[4.2vh] pl-15 pt-14 min-h-34 w-auto ${hideLogo ? "opacity-0" : ""}`}
         onPointerDown={start}
         onPointerUp={cancel}
         onPointerLeave={cancel}

@@ -30,28 +30,29 @@ export default async function CardPage({ params }: Params) {
   if (!url) notFound();
 
   return (
-    <main className="share-page mx-auto flex min-h-dvh max-w-md flex-col items-center gap-5 px-4 py-6 text-white">
-      <div className="flex items-center gap-4 self-start">
+    <main className="share-page mx-auto flex min-h-dvh max-w-md flex-col items-center gap-4 px-[max(1rem,env(safe-area-inset-left))] pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] text-white">
+      <div className="flex items-center gap-3 self-start">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/logo-white.png" alt="Standard Bank" className="h-8 w-auto" />
-        <span className="h-10 w-px bg-white/30" aria-hidden />
+        <img src="/brand/logo-white.png" alt="Standard Bank" className="h-6 w-auto" />
+        <span className="h-8 w-px bg-white/30" aria-hidden />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={ACADEMY_LOGO} alt="Sustainability Academy" className="h-16 w-auto" />
+        <img src={ACADEMY_LOGO} alt="Sustainability Academy" className="h-11 w-auto" />
       </div>
-      <h1 className="self-start text-2xl font-bold leading-tight">Your impact card is ready</h1>
+      <div className="self-start">
+        <h1 className="text-2xl font-bold leading-tight">Your impact card is ready</h1>
+        <p className="mt-1 text-base text-white/75">Save it to your phone and share it.</p>
+      </div>
+      {/* Capped by height so the save button stays above the fold */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={url}
         alt="Your personalised SDG card"
-        className="w-full rounded-2xl shadow-2xl"
+        className="h-auto w-full max-w-[calc(48dvh*0.8)] rounded-2xl shadow-2xl"
         width={1080}
         height={1350}
       />
       <ShareActions imageUrl={`/api/cards/${id}`} fileName={cardFileName(id)} />
-      <p className="text-center text-sm text-white/60">
-        Tip: on iPhone, tap Share, then &quot;Save Image&quot;. You can also press and hold the image.
-      </p>
-      <p className="text-sm font-bold text-white/70">{EVENT.hashtag}</p>
+      <p className="mt-2 text-sm font-bold text-white/70">Post it with {EVENT.hashtag}</p>
     </main>
   );
 }

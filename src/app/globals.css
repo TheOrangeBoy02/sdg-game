@@ -48,6 +48,11 @@ body {
   background: #005aaa url("/brand/wallpaper.png") center bottom / cover no-repeat;
 }
 
+/* Reveal screen: plain backdrop so the card and QR stand out */
+.kiosk-plain {
+  background-image: url("/brand/wallpaper_plain.png");
+}
+
 .share-page {
   background: #00164e;
 }

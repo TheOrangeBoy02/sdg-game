@@ -54,8 +54,8 @@ export default function Game() {
   }, []);
 
   return (
-    <main className="kiosk flex flex-col" key={round}>
-      <BrandBar onStaffReset={reset} />
+    <main className={`kiosk flex flex-col ${stage === "reveal" ? "kiosk-plain" : ""}`} key={round}>
+      <BrandBar onStaffReset={reset} hideLogo={stage === "reveal"} />
 
       {stage === "welcome" && <Welcome onStart={() => setStage("name")} />}
 
