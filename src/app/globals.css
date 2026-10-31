@@ -12,6 +12,13 @@
   font-weight: 700;
   font-display: block;
 }
+/* Handwritten signature on the card (OFL) */
+@font-face {
+  font-family: "Great Vibes";
+  src: url("/fonts/GreatVibes-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: block;
+}
 
 @theme {
   --font-sans: "BentonSans", system-ui, sans-serif;

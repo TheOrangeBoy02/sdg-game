@@ -5,6 +5,8 @@ export const CARD_W = 1080;
 export const CARD_H = 1350;
 
 const FONT = "BentonSans, system-ui, sans-serif";
+const SCRIPT = `"Great Vibes", cursive`;
+const INK = "#111";
 const BG_TOP = "#00164E"; // Stature Blue
 const BG_BOTTOM = "#00008C"; // Deep Blue
 
@@ -48,6 +50,7 @@ export async function renderCard(opts: {
   await Promise.all([
     document.fonts.load(`700 40px BentonSans`),
     document.fonts.load(`400 40px BentonSans`),
+    document.fonts.load(`400 40px ${SCRIPT}`),
   ]).catch(() => {});
   const [bg, logo, academy, sdgIcon] = await Promise.all([
     loadImage(encodeURI("/brand/card wallpaper.png")).catch(() => null),
@@ -126,11 +129,27 @@ export async function renderCard(opts: {
   ctx.clip();
   drawStrokes(ctx, strokes, inner, -P / 2 + pad, -P / 2 + pad);
   ctx.restore();
-  // little "original artwork" tag
-  ctx.fillStyle = BG_TOP;
-  ctx.font = `700 20px ${FONT}`;
-  ctx.textAlign = "right";
-  ctx.fillText("ORIGINAL ARTWORK", P / 2 - 28, P / 2 - 24);
+  // Handwritten signature: name over date, bottom right, left edges aligned
+  const date = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  ctx.fillStyle = INK;
+  ctx.textAlign = "left";
+  ctx.font = `400 64px ${SCRIPT}`;
+  const nameW = name ? ctx.measureText(name).width : 0;
+  // Date words drawn one by one: the script font's own space is too tight
+  ctx.font = `400 32px ${SCRIPT}`;
+  const dateWords = date.split(" ").map((w) => [w, ctx.measureText(w).width] as const);
+  const wordGap = 12;
+  const dateW = dateWords.reduce((s, [, w]) => s + w, 0) + wordGap * (dateWords.length - 1);
+  const sx = P / 2 - 48 - Math.max(nameW, dateW);
+  let dx = sx;
+  for (const [w, ww] of dateWords) {
+    ctx.fillText(w, dx, P / 2 - 40);
+    dx += ww + wordGap;
+  }
+  if (name) {
+    ctx.font = `400 64px ${SCRIPT}`;
+    ctx.fillText(name, sx, P / 2 - 76);
+  }
   ctx.restore();
 
   // SDG tile: official UN icon, drawn unaltered (no rounding or recolouring). Drawn tile only if it fails to load.
@@ -152,24 +171,32 @@ export async function renderCard(opts: {
     sdgLines.forEach((l, i) => ctx.fillText(l, tx + 18, ty + T - 18 - (sdgLines.length - 1 - i) * 20));
   }
 
-  // Message
-  const mx = tx + T + 36;
-  const mw = CARD_W - mx - 64;
-  ctx.fillStyle = "rgba(255,255,255,0.75)";
-  ctx.font = `700 22px ${FONT}`;
-  ctx.fillText(`MY SDG: GOAL ${theme.sdgNumber}, ${theme.sdgName.toUpperCase()}`, mx, ty + 22);
+  // Message: white panel joined to the tile, label and belief centred vertically
+  const boxX = tx + T;
   ctx.fillStyle = "#fff";
-  ctx.font = `400 29px ${FONT}`;
-  let y = ty + 66;
-  for (const l of wrapLines(ctx, theme.belief, mw)) {
+  ctx.fillRect(boxX, ty, CARD_W - 64 - boxX, T);
+  const mx = boxX + 38;
+  const mw = CARD_W - 64 - 38 - mx;
+  let bodySize = 38;
+  let lines: string[];
+  do {
+    ctx.font = `700 ${bodySize}px ${FONT}`;
+    lines = wrapLines(ctx, theme.belief, mw);
+  } while (lines.length > 2 && --bodySize > 24);
+  const lh = Math.round(bodySize * 1.1);
+  const labelCap = 16;
+  const gap = 12;
+  const textH = labelCap + gap + (lines.length - 1) * lh + bodySize * 0.72;
+  let y = ty + (T - textH) / 2 + labelCap;
+  ctx.fillStyle = "#666";
+  ctx.font = `700 22px ${FONT}`;
+  ctx.fillText(`MY SDG: GOAL ${theme.sdgNumber}, ${theme.sdgName.toUpperCase()}`, mx, y);
+  y += gap + bodySize * 0.72;
+  ctx.fillStyle = INK;
+  ctx.font = `700 ${bodySize}px ${FONT}`;
+  for (const l of lines) {
     ctx.fillText(l, mx, y);
-    y += 37;
-  }
-  y += 8;
-  ctx.font = `700 29px ${FONT}`;
-  for (const l of wrapLines(ctx, `My mission: ${theme.mission}`, mw)) {
-    ctx.fillText(l, mx, y);
-    y += 37;
+    y += lh;
   }
 
   // Footer
