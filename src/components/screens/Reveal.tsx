@@ -115,9 +115,7 @@ export default function Reveal({
         <p className="animate-rise mt-[1vh] text-[2.5vh] font-bold leading-snug" style={{ animationDelay: "300ms" }}>
           Your mission: {theme.mission}
         </p>
-        <p className="animate-rise mt-[1vh] text-[2.2vh] text-white/70" style={{ animationDelay: "360ms" }}>
-          Your SDG: Goal {theme.sdgNumber}, {theme.sdgName}
-        </p>
+      
 
         <div
           className="animate-rise mt-[3vh] flex items-center gap-[2vw] rounded-[3vh] bg-white p-[2vh] text-stature"

@@ -61,7 +61,7 @@ Scoring (`src/lib/scoring.ts`): each answer gives +3 to its primary theme and +1
 | `src/components/DrawingCanvas.tsx` | Pointer Events canvas, DPR aware, coalesced events, single active pointer, palm rejection after Pencil use, ignores input after `endAt` |
 | `src/components/screens/Draw.tsx` | Challenge intro, 3-2-1 countdown, wall-clock timer (rAF display + hard `setTimeout` + `visibilitychange` check), "I'm finished", time's up, retry only if nothing drawn |
 | `src/components/screens/Reveal.tsx` | Drumroll, renders card, uploads, shows QR (`qrcode.react`), retry on failure, "Done, next player" |
-| `src/lib/card.ts` | Draws the 1080x1350 card on a canvas (Standard Bank logo left and Academy crest right, identity, sketch panel signed with name and date in Great Vibes script, SDG tile joined to a white belief panel, footer). Mission is on the reveal screen only |
+| `src/lib/card.ts` | Draws the 1080x1350 card on a canvas (Standard Bank logo left and Academy crest right, identity, sketch panel signed with name (Great Vibes script) and date (BentonSans Regular), SDG tile joined to a white belief panel, footer). Mission is on the reveal screen only |
 | `src/lib/useIdle.ts` | Idle auto-reset (disabled on welcome and during drawing), 10s warning banner |
 | `src/components/BrandBar.tsx` | Header. Staff reset: press and hold logo 3s |
 | `src/app/api/cards/route.ts` | POST raw PNG body. Rate limit (30/min per IP, all venue iPads share one IP), then `x-kiosk-key` must equal `KIOSK_SECRET`, then PNG signature and max 4MB. Returns `{ id, shareUrl }` (absolute: `NEXT_PUBLIC_SITE_URL`, else request origin with `localhost` swapped for the Mac's LAN IP so phones can scan it) |

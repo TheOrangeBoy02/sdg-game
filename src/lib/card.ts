@@ -135,17 +135,9 @@ export async function renderCard(opts: {
   ctx.textAlign = "left";
   ctx.font = `400 64px ${SCRIPT}`;
   const nameW = name ? ctx.measureText(name).width : 0;
-  // Date words drawn one by one: the script font's own space is too tight
-  ctx.font = `400 32px ${SCRIPT}`;
-  const dateWords = date.split(" ").map((w) => [w, ctx.measureText(w).width] as const);
-  const wordGap = 12;
-  const dateW = dateWords.reduce((s, [, w]) => s + w, 0) + wordGap * (dateWords.length - 1);
-  const sx = P / 2 - 48 - Math.max(nameW, dateW);
-  let dx = sx;
-  for (const [w, ww] of dateWords) {
-    ctx.fillText(w, dx, P / 2 - 40);
-    dx += ww + wordGap;
-  }
+  ctx.font = `400 16px ${FONT}`;
+  const sx = P / 2 - 48 - Math.max(nameW, ctx.measureText(date).width);
+  ctx.fillText(date, sx, P / 2 - 40);
   if (name) {
     ctx.font = `400 64px ${SCRIPT}`;
     ctx.fillText(name, sx, P / 2 - 76);
